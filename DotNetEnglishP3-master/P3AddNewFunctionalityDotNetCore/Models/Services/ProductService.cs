@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,8 +41,8 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
                 products.Add(new ProductViewModel
                 {
                     Id = product.Id,
-                    Stock = product.Quantity.ToString(),
-                    Price = product.Price.ToString(CultureInfo.InvariantCulture),
+                    Stock = product.Quantity,
+                    Price = (decimal)product.Price,
                     Name = product.Name,
                     Description = product.Description,
                     Details = product.Details
@@ -93,44 +94,13 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
         // TODO this is an example method, remove it and perform model validation using data annotations
         public List<string> CheckProductModelErrors(ProductViewModel product)
         {
-            List<string> modelErrors = new List<string>();
-            if (product.Name == null || string.IsNullOrWhiteSpace(product.Name))
-            {
-                modelErrors.Add(_localizer["MissingName"]);
-            }
+            var validationResults = new List<ValidationResult>();
+            var context = new ValidationContext(product, null, null);
+            Validator.TryValidateObject(product, context, validationResults, true);
 
-            if (product.Price == null || string.IsNullOrWhiteSpace(product.Price))
-            {
-                modelErrors.Add(_localizer["MissingPrice"]);
-            }
-
-            if (!Double.TryParse(product.Price, out double pc))
-            {
-                modelErrors.Add(_localizer["PriceNotANumber"]);
-            }
-            else
-            {
-                if (pc <= 0)
-                    modelErrors.Add(_localizer["PriceNotGreaterThanZero"]);
-            }
-
-            if (product.Stock == null || string.IsNullOrWhiteSpace(product.Stock))
-            {
-                modelErrors.Add(_localizer["MissingQuantity"]);
-            }
-
-            if (!int.TryParse(product.Stock, out int qt))
-            {
-                modelErrors.Add(_localizer["StockNotAnInteger"]);
-            }
-            else
-            {
-                if (qt <= 0)
-                    modelErrors.Add(_localizer["StockNotGreaterThanZero"]);
-            }
-
-            return modelErrors;
+            return validationResults.Select(e => e.ErrorMessage).ToList();
         }
+
 
         public void SaveProduct(ProductViewModel product)
         {
@@ -143,8 +113,8 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
             Product productEntity = new Product
             {
                 Name = product.Name,
-                Price = double.Parse(product.Price),
-                Quantity = Int32.Parse(product.Stock),
+                Price = (double)product.Price,
+                Quantity = product.Stock,
                 Description = product.Description,
                 Details = product.Details
             };
