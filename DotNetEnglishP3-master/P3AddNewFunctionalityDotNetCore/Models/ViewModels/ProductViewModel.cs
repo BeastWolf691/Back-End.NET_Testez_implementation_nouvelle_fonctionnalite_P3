@@ -1,5 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using P3AddNewFunctionalityDotNetCore.Models.Entities;
+using P3AddNewFunctionalityDotNetCore.Resources.Models.Services;
+
 
 namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
 {
@@ -8,20 +11,23 @@ namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
         [BindNever]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "MissingName")]
-        [RegularExpression(@"^[a-zA-Z\s.,;:!?()]+$", ErrorMessage = "InvalidName")]
+        [Required(ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName ="MissingName")]
+        [RegularExpression(@"^[a-zA-Z\s.,;:!?()]+$", ErrorMessage = "MissingName")]
         public string Name { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z\s.,;:!?()]+$", ErrorMessage = "InvalidDescription")]
+        [RegularExpression(@"^[a-zA-Z\s.,;:!?()]+$")]
         public string Description { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z\s.,;:!?()]+$", ErrorMessage = "InvalidDetails")]
+        [RegularExpression(@"^[a-zA-Z\s.,;:!?()]+$")]
         public string Details { get; set; }
 
-        [Range(0.01, double.MaxValue, ErrorMessage = "PriceNotGreaterThanZero")]
+        [Required(ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName = "MissingPrice")]
+        [Range(0.01, double.MaxValue,ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName = "PriceNotGreaterThanZero")]
+
         public decimal Price { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "QuantityNotGreaterThanZero")]
+        [Required(ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName = "MissingStock")]
+        [Range(1, int.MaxValue, ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName =  "StockNotGreaterThanZero")]
         public int Stock { get; set; }
     }
 }

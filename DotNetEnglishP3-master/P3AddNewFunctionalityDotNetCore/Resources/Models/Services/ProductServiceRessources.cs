@@ -5,9 +5,12 @@ using System.Globalization;
 
 namespace P3AddNewFunctionalityDotNetCore.Resources.Models.Services
 {
-    public static class ProductService
+    public static class ProductServiceRessources
     {
-        private static ResourceManager resourceManager = new ResourceManager("P3.Resources.Models.Services.ProductService", Assembly.GetExecutingAssembly());
+        private static ResourceManager resourceManager = new ResourceManager(
+  "P3AddNewFunctionalityDotNetCore.Resources.Models.Services.ProductService",
+  Assembly.GetExecutingAssembly());
+
         private static CultureInfo resourceCulture;
 
         public static string MissingName
