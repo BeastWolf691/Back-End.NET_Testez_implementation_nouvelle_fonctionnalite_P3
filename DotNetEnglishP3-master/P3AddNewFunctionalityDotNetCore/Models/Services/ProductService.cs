@@ -8,6 +8,7 @@ using Microsoft.Extensions.Localization;
 using P3AddNewFunctionalityDotNetCore.Models.Entities;
 using P3AddNewFunctionalityDotNetCore.Models.Repositories;
 using P3AddNewFunctionalityDotNetCore.Models.ViewModels;
+using P3AddNewFunctionalityDotNetCore.Resources.Models.Services;
 
 namespace P3AddNewFunctionalityDotNetCore.Models.Services
 {
@@ -92,14 +93,19 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
         }
 
         // TODO this is an example method, remove it and perform model validation using data annotations
-        public List<string> CheckProductModelErrors(ProductViewModel product)
+        public Dictionary<string, string> CheckProductModelErrors(ProductViewModel product)
         {
             var validationResults = new List<ValidationResult>();
-            var context = new ValidationContext(product, null, null);
+            var context = new ValidationContext(product);
             Validator.TryValidateObject(product, context, validationResults, true);
 
-            return validationResults.Select(e => e.ErrorMessage).ToList();
+            var errors = validationResults
+                .SelectMany(result => result.MemberNames.Select(member => new { member, result.ErrorMessage }))
+                .ToDictionary(x => x.member, x => x.ErrorMessage);
+
+            return errors;
         }
+
 
 
         public void SaveProduct(ProductViewModel product)

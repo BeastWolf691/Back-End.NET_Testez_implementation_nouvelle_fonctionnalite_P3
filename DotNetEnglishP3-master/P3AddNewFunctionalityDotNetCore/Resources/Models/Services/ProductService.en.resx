@@ -126,6 +126,9 @@
   <data name="MissingStock" xml:space="preserve">
     <value>Please enter a stock value</value>
   </data>
+  <data name="NotName" xml:space="preserve">
+    <value>Name must only contain letters and punctuation</value>
+  </data>
   <data name="PriceNotANumber" xml:space="preserve">
     <value>The value entered for the price must be a number</value>
   </data>

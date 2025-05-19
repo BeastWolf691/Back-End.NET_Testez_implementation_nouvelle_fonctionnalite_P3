@@ -62,6 +62,13 @@ namespace P3AddNewFunctionalityDotNetCore.Resources.Models.Services
                 return resourceManager.GetString("StockNotGreaterThanZero", resourceCulture);
             }
         }
+        public static string NotName
+        {
+            get
+            {
+                return resourceManager.GetString("NotName", resourceCulture);
+            }
+        }
     }
 }
 
