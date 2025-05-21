@@ -126,6 +126,12 @@
   <data name="MissingStock" xml:space="preserve">
     <value>Veuillez saisir un stock</value>
   </data>
+  <data name="NotDescription" xml:space="preserve">
+    <value>La description ne doit contenir que des lettres et des signes de ponctuation</value>
+  </data>
+  <data name="NotDetails" xml:space="preserve">
+    <value>Le détail ne doit contenir que des lettres et des signes de ponctuation</value>
+  </data>
   <data name="NotName" xml:space="preserve">
     <value>Le nom ne doit contenir que des lettres et des signes de ponctuation</value>
   </data>

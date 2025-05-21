@@ -126,6 +126,12 @@
   <data name="MissingStock" xml:space="preserve">
     <value>Introduzca un valor de stock</value>
   </data>
+  <data name="NotDescription" xml:space="preserve">
+    <value>La descripción sólo debe contener letras y signos de puntuación</value>
+  </data>
+  <data name="NotDetails" xml:space="preserve">
+    <value>El detalle debe contener sólo letras y signos de puntuación</value>
+  </data>
   <data name="NotName" xml:space="preserve">
     <value>El nombre sólo debe contener letras y signos de puntuación</value>
   </data>

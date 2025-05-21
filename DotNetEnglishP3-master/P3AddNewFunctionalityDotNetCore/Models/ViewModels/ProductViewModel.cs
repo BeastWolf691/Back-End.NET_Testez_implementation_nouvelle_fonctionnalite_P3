@@ -15,18 +15,20 @@ namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
         [RegularExpression(@"^[a-zA-Z\p{L}\s\-()]+$", ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName = "NotName")]
         public string Name { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z\s,.\-()]+$")]
+        [RegularExpression(@"^[a-zA-Z\p{L}\s\-()]*$", ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName = "NotDescription")]
         public string Description { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z\s.,\-()]+$")]
+        [RegularExpression(@"^[a-zA-Z\p{L}\s\-()]*$", ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName = "NotDetails")]
         public string Details { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName = "MissingPrice")]
-        [Range(0.01, double.MaxValue,ErrorMessageResourceType = typeof(ProductServiceRessources),ErrorMessageResourceName = "PriceNotGreaterThanZero")]
-        public decimal Price { get; set; }
+        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName = "PriceNotANumber")]
+        [Range(1, double.MaxValue,ErrorMessageResourceType = typeof(ProductServiceRessources),ErrorMessageResourceName = "PriceNotGreaterThanZero")]
+        public string Price { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName = "MissingStock")]
+        [RegularExpression(@"^\d+$", ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName = "StockNotAnInteger")]
         [Range(1, int.MaxValue, ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName = "StockNotGreaterThanZero")]
-        public int Stock { get; set; }
+        public string Stock { get; set; }
     }
 }

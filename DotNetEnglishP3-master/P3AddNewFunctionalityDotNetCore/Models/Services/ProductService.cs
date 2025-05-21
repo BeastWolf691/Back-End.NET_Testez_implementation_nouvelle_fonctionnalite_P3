@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Localization;
 using P3AddNewFunctionalityDotNetCore.Models.Entities;
 using P3AddNewFunctionalityDotNetCore.Models.Repositories;
@@ -42,8 +44,8 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
                 products.Add(new ProductViewModel
                 {
                     Id = product.Id,
-                    Stock = product.Quantity,
-                    Price = (decimal)product.Price,
+                    Stock = product.Quantity.ToString(),
+                    Price = product.Price.ToString(CultureInfo.InvariantCulture),
                     Name = product.Name,
                     Description = product.Description,
                     Details = product.Details
@@ -116,11 +118,15 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
 
         private static Product MapToProductEntity(ProductViewModel product)
         {
+            if (!double.TryParse(product.Price.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out double parsedPrice))
+            {
+                throw new FormatException($"Invalid price format: '{product.Price}'");
+            }
             Product productEntity = new Product
             {
                 Name = product.Name,
-                Price = (double)product.Price,
-                Quantity = product.Stock,
+                Price = parsedPrice,
+                Quantity = Int32.Parse(product.Stock),
                 Description = product.Description,
                 Details = product.Details
             };

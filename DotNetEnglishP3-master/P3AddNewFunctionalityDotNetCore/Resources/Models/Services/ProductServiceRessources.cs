@@ -69,6 +69,22 @@ namespace P3AddNewFunctionalityDotNetCore.Resources.Models.Services
                 return resourceManager.GetString("NotName", resourceCulture);
             }
         }
+
+        public static string NotDescription
+        {
+            get
+            {
+                return resourceManager.GetString("NotDescription", resourceCulture);
+            }
+        }
+
+        public static string NotDetails
+        {
+            get
+            {
+                return resourceManager.GetString("NotDetails", resourceCulture);
+            }
+        }
     }
 }
 
