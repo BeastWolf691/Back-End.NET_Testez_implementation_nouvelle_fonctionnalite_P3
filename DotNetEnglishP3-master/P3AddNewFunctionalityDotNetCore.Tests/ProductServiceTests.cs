@@ -2,76 +2,64 @@
 using Xunit;
 using P3AddNewFunctionalityDotNetCore.Models.ViewModels;
 using System.ComponentModel.DataAnnotations;
+using P3AddNewFunctionalityDotNetCore.Resources.Models.Services;
 using System;
-using P3AddNewFunctionalityDotNetCore.Models.Services;
 
 namespace P3AddNewFunctionalityDotNetCore.Tests
 {
     public class ProductServiceTests
     {
-        private class MockProductViewModel
+        private List<ValidationResult> ValidateModel(ProductViewModel model)
         {
-            [Required(ErrorMessage = "MissingName")]
-            public string Name { get; set; }
-
-            public string Description { get; set; }
-
-            public string Details { get; set; }
-
-            [Range(0.01, double.MaxValue, ErrorMessage = "PriceNotGreaterThanZero")]
-            public decimal Price { get; set; }
-
-            [Range(1, int.MaxValue, ErrorMessage = "QuantityNotGreaterThanZero")]
-            public int Stock { get; set; }
+            var results = new List<ValidationResult>();
+            var context = new ValidationContext(model, null, null);
+            Validator.TryValidateObject(model, context, results, true);
+            return results;
         }
 
-        /// <summary>
-        /// Take this test method as a template to write your test method.
-        /// A test method must check if a definite method does its job:
-        /// returns an expected value from a particular set of parameters
-        /// </summary>
         [Fact]
-        public void ProductViewModel_ShouldBeValid_WhenAllFieldsCorrect()
+        public void ProductViewModel_ShouldBeInvalid_WhenPriceIsNegative()
         {
-            // Arrange
-            var product = new MockProductViewModel
+            Console.WriteLine("Test de validation du modèle ProductViewModel avec un prix négatif.");
+            var product = new ProductViewModel
             {
                 Name = "Valid Product",
                 Description = "",
                 Details = "",
-                Price = 19.99m,
-                Stock = 10
+                Price = "-10",
+                Stock = "10"
             };
-            var context = new ValidationContext(product);
-            var results = new List<ValidationResult>();
 
-            // Act
-            var isValid = Validator.TryValidateObject(product, context, results, true);
-
-            // Assert
-            Assert.True(isValid);
-            Assert.Empty(results);
+            var results = ValidateModel(product);
+            if (results.Count == 0)
+            {
+                Console.WriteLine("Aucune erreur de validation retournée.");
+            }
+            else
+            {
+                foreach (var error in results)
+                {
+                    Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
+                }
+            }
+            Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.PriceNotGreaterThanZero);
         }
 
         [Fact]
         public void ProductViewModel_ShouldBeInvalid_WhenPriceIsZero()
         {
-            // Arrange
-            var product = new MockProductViewModel
+            Console.WriteLine("Test de validation du modèle ProductViewModel avec un prix égal à zéro.");
+            var product = new ProductViewModel
             {
                 Name = "Valid Product",
                 Description = "",
                 Details = "",
-                Price = 0m,
-                Stock = 10
+                Price = "0",
+                Stock = "10"
             };
-            var context = new ValidationContext(product);
-            var results = new List<ValidationResult>();
 
-            // Act
-            var isValid = Validator.TryValidateObject(product, context, results, true);
+            var results = ValidateModel(product);
 
-            // 🔍 Debug : Affiche les erreurs s'il y en a
             if (results.Count == 0)
             {
                 Console.WriteLine("Aucune erreur de validation retournée.");
@@ -83,27 +71,81 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
                     Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
                 }
             }
+            Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.PriceNotGreaterThanZero);
+        }
 
-            // Assert
-            Assert.False(isValid);
-            Assert.Contains(results, r => r.ErrorMessage != null && r.ErrorMessage.Contains("PriceNotGreaterThanZero"));
+        [Fact]
+        public void ProductViewModel_ShouldBeInvalid_WhenPriceIsMissing()
+        {
+            Console.WriteLine("Test de validation du modèle ProductViewModel avec un prix manquant.");
+            var product = new ProductViewModel
+            {
+                Name = "Produit",
+                Description = "",
+                Details = "",
+                Price = null, // champ requis manquant
+                Stock = "5"
+            };
+
+            var results = ValidateModel(product);
+
+            if (results.Count == 0)
+            {
+                Console.WriteLine("Aucune erreur de validation retournée.");
+            }
+            else
+            {
+                foreach (var error in results)
+                {
+                    Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
+                }
+            }
+            Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.MissingPrice);
+        }
+
+        [Fact]
+        public void ProductViewModel_ShouldBeInvalid_WhenPriceIsNotDecimal()
+        {
+            Console.WriteLine("Test de validation du modèle ProductViewModel avec un prix non décimal.");
+            var product = new ProductViewModel
+            {
+                Name = "Produit",
+                Description = "",
+                Details = "",
+                Price = "5.001", // trop de décimales
+                Stock = "5"
+            };
+
+            var results = ValidateModel(product);
+
+            if (results.Count == 0)
+            {
+                Console.WriteLine("Aucune erreur de validation retournée.");
+            }
+            else
+            {
+                foreach (var error in results)
+                {
+                    Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
+                }
+            }
+            Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.PriceNotANumber);
         }
 
         [Fact]
         public void ProductViewModel_ShouldBeInvalid_WhenNameIsMissing()
         {
-            var product = new MockProductViewModel
+            Console.WriteLine("Test de validation du modèle ProductViewModel avec un nom manquant.");
+            var product = new ProductViewModel
             {
                 Name = "",
-                Price = 10m,
-                Stock = 5
+                Description = "",
+                Details = "",
+                Price = "10",
+                Stock = "5"
             };
-            var context = new ValidationContext(product);
-            var results = new List<ValidationResult>();
 
-            var isValid = Validator.TryValidateObject(product, context, results, true);
-
-            // 🔍 Debug : Affiche les erreurs s'il y en a
+            var results = ValidateModel(product);
             if (results.Count == 0)
             {
                 Console.WriteLine("Aucune erreur de validation retournée.");
@@ -115,26 +157,82 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
                     Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
                 }
             }
-            // Assert
-            Assert.False(isValid);
-            Assert.Contains(results, r => r.ErrorMessage != null && r.ErrorMessage.Contains("MissingName"));
+            Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.MissingName);
+        }
+
+        [Fact]
+        public void ProductViewModel_ShouldBeValid_WithCorrectData()
+        {
+            Console.WriteLine("Test de validation du modèle ProductViewModel avec des données correctes.");
+            var product = new ProductViewModel
+            {
+                Name = "Nom Produit",
+                Description = "Ceci est une description",
+                Details = "Détails optionnels",
+                Price = "25.50",
+                Stock = "5"
+            };
+
+            var results = ValidateModel(product);
+
+            if (results.Count == 0)
+            {
+                Console.WriteLine("Aucune erreur de validation retournée.");
+            }
+            else
+            {
+                foreach (var error in results)
+                {
+                    Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
+                }
+            }
+            Assert.Empty(results);
+        }
+
+        [Fact]
+        public void ProductViewModel_ShouldBeInvalid_WhenStockIsNotInteger()
+        {
+            Console.WriteLine("Test de validation du modèle ProductViewModel avec un stock non entier.");
+            var product = new ProductViewModel
+            {
+                Name = "Produit",
+                Description = "",
+                Details = "",
+                Price = "10",
+                Stock = "abc"
+            };
+
+            var results = ValidateModel(product);
+
+            if (results.Count == 0)
+            {
+                Console.WriteLine("Aucune erreur de validation retournée.");
+            }
+            else
+            {
+                foreach (var error in results)
+                {
+                    Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
+                }
+            }
+            Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.StockNotAnInteger);
         }
 
         [Fact]
         public void ProductViewModel_ShouldBeInvalid_WhenStockIsZero()
         {
-            var product = new MockProductViewModel
+            Console.WriteLine("Test de validation du modèle ProductViewModel avec un stock égal à zéro.");
+            var product = new ProductViewModel
             {
-                Name = "Test",
-                Price = 10m,
-                Stock = 0
+                Name = "Produit",
+                Description = "",
+                Details = "",
+                Price = "10",
+                Stock = "0"
             };
-            var context = new ValidationContext(product);
-            var results = new List<ValidationResult>();
 
-            var isValid = Validator.TryValidateObject(product, context, results, true);
+            var results = ValidateModel(product);
 
-            // 🔍 Debug : Affiche les erreurs s'il y en a
             if (results.Count == 0)
             {
                 Console.WriteLine("Aucune erreur de validation retournée.");
@@ -146,13 +244,36 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
                     Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
                 }
             }
-            // Assert
-            Assert.False(isValid);
-            Assert.Contains(results, r => r.ErrorMessage != null && r.ErrorMessage.Contains("QuantityNotGreaterThanZero"));
+            Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.StockNotGreaterThanZero);
         }
 
+        [Fact]
+        public void ProductViewModel_ShouldBeInvalid_WhenStockIsMissing()
+        {
+            Console.WriteLine("Test de validation du modèle ProductViewModel avec un stock manquant.");
+            var product = new ProductViewModel
+            {
+                Name = "Produit",
+                Description = "",
+                Details = "",
+                Price = "10",
+                Stock = null
+            };
+
+            var results = ValidateModel(product);
+
+            if (results.Count == 0)
+            {
+                Console.WriteLine("Aucune erreur de validation retournée.");
+            }
+            else
+            {
+                foreach (var error in results)
+                {
+                    Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
+                }
+            }
+            Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.MissingStock);
+        }
     }
 }
-
-// TODO write test methods to ensure a correct coverage of all possibilities
-
