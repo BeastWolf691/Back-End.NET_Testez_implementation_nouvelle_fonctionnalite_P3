@@ -15,7 +15,7 @@ namespace P3AddNewFunctionalityDotNetCore.Models.ViewModels
         [RegularExpression(@"^[a-zA-Z\p{L}\s\-()]+$", ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName = "NotName")]
         public string Name { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z\p{L}\s\-()]*$", ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName = "NotDescription")]
+        [RegularExpression(@"^[a-zA-Z\p{L}\s\-()\d{1,2}]*$", ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName = "NotDescription")]
         public string Description { get; set; }
 
         [RegularExpression(@"^[a-zA-Z\p{L}\s\-()]*$", ErrorMessageResourceType = typeof(ProductServiceRessources), ErrorMessageResourceName = "NotDetails")]
