@@ -47,7 +47,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             var results = ValidateModel(product);
             DisplayValidationResults(results);
 
-            Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.PriceNotGreaterThanZero);
+            Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.PriceNotANumber);
         }
 
         [Fact]
@@ -165,6 +165,23 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
         }
 
         [Fact]
+        public void ProductViewModel_ShouldBeInvalid_WhenStockIsNegative()
+        {
+            Console.WriteLine("Test de validation du modèle ProductViewModel avec un stock négatif.");
+            var product = new ProductViewModel
+            {
+                Name = "Produit",
+                Description = "",
+                Details = "",
+                Price = "10",
+                Stock = "-5"
+            };
+            var results = ValidateModel(product);
+            DisplayValidationResults(results);
+            Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.StockNotAnInteger);
+        }
+
+        [Fact]
         public void ProductViewModel_ShouldBeInvalid_WhenStockIsZero()
         {
             Console.WriteLine("Test de validation du modèle ProductViewModel avec un stock égal à zéro.");
@@ -200,6 +217,57 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             DisplayValidationResults(results);
 
             Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.MissingStock);
+        }
+
+        [Fact]
+        public void ProductViewModel_ShouldBeInvalid_WhenNameContainsSpecialCharacters()
+        {
+            Console.WriteLine("Test de validation du modèle ProductViewModel avec un nom contenant des caractères spéciaux.");
+            var product = new ProductViewModel
+            {
+                Name = "Produit@123",
+                Description = "",
+                Details = "",
+                Price = "10",
+                Stock = "5"
+            };
+            var results = ValidateModel(product);
+            DisplayValidationResults(results);
+            Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.NotName);
+        }
+
+        [Fact]
+        public void ProductViewModel_ShouldBeInvalid_WhenDescriptionContainsSpecialCharacters()
+        {
+            Console.WriteLine("Test de validation du modèle ProductViewModel avec une description contenant des caractères spéciaux.");
+            var product = new ProductViewModel
+            {
+                Name = "Produit",
+                Description = "Ceci est une description@123",
+                Details = "",
+                Price = "10",
+                Stock = "5"
+            };
+            var results = ValidateModel(product);
+            DisplayValidationResults(results);
+            Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.NotDescription);
+        }
+
+        [Fact]
+        public void ProductViewModel_ShouldBeInvalid_WhenDetailsContainsSpecialCharacters()
+        {
+            Console.WriteLine("Test de validation du modèle ProductViewModel avec des détails contenant des caractères spéciaux.");
+            var product = new ProductViewModel
+            {
+                Name = "Produit",
+                Description = "",
+                Details = "Détails@123",
+                Price = "10",
+                Stock = "5"
+            };
+            var results = ValidateModel(product);
+            DisplayValidationResults(results);
+            Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.NotDetails);
         }
     }
 }
