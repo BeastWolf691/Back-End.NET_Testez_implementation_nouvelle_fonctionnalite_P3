@@ -16,6 +16,20 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             Validator.TryValidateObject(model, context, results, true);
             return results;
         }
+        private void DisplayValidationResults(List<ValidationResult> results)
+        {
+            if (results.Count == 0)
+            {
+                Console.WriteLine("Aucune erreur de validation retournée.");
+            }
+            else
+            {
+                foreach (var error in results)
+                {
+                    Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
+                }
+            }
+        }
 
         [Fact]
         public void ProductViewModel_ShouldBeInvalid_WhenPriceIsNegative()
@@ -31,17 +45,8 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             };
 
             var results = ValidateModel(product);
-            if (results.Count == 0)
-            {
-                Console.WriteLine("Aucune erreur de validation retournée.");
-            }
-            else
-            {
-                foreach (var error in results)
-                {
-                    Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
-                }
-            }
+            DisplayValidationResults(results);
+
             Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.PriceNotGreaterThanZero);
         }
 
@@ -59,18 +64,8 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             };
 
             var results = ValidateModel(product);
+            DisplayValidationResults(results);
 
-            if (results.Count == 0)
-            {
-                Console.WriteLine("Aucune erreur de validation retournée.");
-            }
-            else
-            {
-                foreach (var error in results)
-                {
-                    Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
-                }
-            }
             Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.PriceNotGreaterThanZero);
         }
 
@@ -88,18 +83,8 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             };
 
             var results = ValidateModel(product);
+            DisplayValidationResults(results);
 
-            if (results.Count == 0)
-            {
-                Console.WriteLine("Aucune erreur de validation retournée.");
-            }
-            else
-            {
-                foreach (var error in results)
-                {
-                    Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
-                }
-            }
             Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.MissingPrice);
         }
 
@@ -117,18 +102,8 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             };
 
             var results = ValidateModel(product);
+            DisplayValidationResults(results);
 
-            if (results.Count == 0)
-            {
-                Console.WriteLine("Aucune erreur de validation retournée.");
-            }
-            else
-            {
-                foreach (var error in results)
-                {
-                    Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
-                }
-            }
             Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.PriceNotANumber);
         }
 
@@ -146,17 +121,8 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             };
 
             var results = ValidateModel(product);
-            if (results.Count == 0)
-            {
-                Console.WriteLine("Aucune erreur de validation retournée.");
-            }
-            else
-            {
-                foreach (var error in results)
-                {
-                    Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
-                }
-            }
+            DisplayValidationResults(results);
+
             Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.MissingName);
         }
 
@@ -174,18 +140,8 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             };
 
             var results = ValidateModel(product);
+            DisplayValidationResults(results);
 
-            if (results.Count == 0)
-            {
-                Console.WriteLine("Aucune erreur de validation retournée.");
-            }
-            else
-            {
-                foreach (var error in results)
-                {
-                    Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
-                }
-            }
             Assert.Empty(results);
         }
 
@@ -203,18 +159,8 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             };
 
             var results = ValidateModel(product);
+            DisplayValidationResults(results);
 
-            if (results.Count == 0)
-            {
-                Console.WriteLine("Aucune erreur de validation retournée.");
-            }
-            else
-            {
-                foreach (var error in results)
-                {
-                    Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
-                }
-            }
             Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.StockNotAnInteger);
         }
 
@@ -232,18 +178,8 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             };
 
             var results = ValidateModel(product);
+            DisplayValidationResults(results);
 
-            if (results.Count == 0)
-            {
-                Console.WriteLine("Aucune erreur de validation retournée.");
-            }
-            else
-            {
-                foreach (var error in results)
-                {
-                    Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
-                }
-            }
             Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.StockNotGreaterThanZero);
         }
 
@@ -261,18 +197,8 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
             };
 
             var results = ValidateModel(product);
+            DisplayValidationResults(results);
 
-            if (results.Count == 0)
-            {
-                Console.WriteLine("Aucune erreur de validation retournée.");
-            }
-            else
-            {
-                foreach (var error in results)
-                {
-                    Console.WriteLine("Erreur trouvée : " + error.ErrorMessage);
-                }
-            }
             Assert.Contains(results, r => r.ErrorMessage == ProductServiceRessources.MissingStock);
         }
     }
