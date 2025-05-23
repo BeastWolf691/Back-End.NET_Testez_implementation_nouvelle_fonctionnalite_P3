@@ -105,7 +105,7 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
                 .SelectMany(result => result.MemberNames.Select(member => new { member, result.ErrorMessage }))
                 .ToDictionary(x => x.member, x => x.ErrorMessage);
 
-            return validationResults.Select(r => r.ErrorMessage).ToList();
+                return validationResults.Select(r => r.ErrorMessage).ToList();
         }
 
 
@@ -118,7 +118,7 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
 
         private static Product MapToProductEntity(ProductViewModel product)
         {
-            if (!double.TryParse(product.Price.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out double parsedPrice))
+            if (!double.TryParse(product.Price, NumberStyles.Any, CultureInfo.InvariantCulture, out double parsedPrice))
             {
                 throw new FormatException($"Invalid price format: '{product.Price}'");
             }
