@@ -44,7 +44,7 @@ namespace P3AddNewFunctionalityDotNetCore.Controllers
 
             foreach (var error in modelErrors)
             {
-                ModelState.AddModelError(error.Key, error.Value);
+                ModelState.AddModelError(string.Empty, error);
             }
 
             if (ModelState.IsValid)

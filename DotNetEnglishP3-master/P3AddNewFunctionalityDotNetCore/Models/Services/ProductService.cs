@@ -95,7 +95,7 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
         }
 
         // TODO this is an example method, remove it and perform model validation using data annotations
-        public Dictionary<string, string> CheckProductModelErrors(ProductViewModel product)
+        public List<string> CheckProductModelErrors(ProductViewModel product)
         {
             var validationResults = new List<ValidationResult>();
             var context = new ValidationContext(product);
@@ -105,7 +105,7 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
                 .SelectMany(result => result.MemberNames.Select(member => new { member, result.ErrorMessage }))
                 .ToDictionary(x => x.member, x => x.ErrorMessage);
 
-            return errors;
+            return validationResults.Select(r => r.ErrorMessage).ToList();
         }
 
 
