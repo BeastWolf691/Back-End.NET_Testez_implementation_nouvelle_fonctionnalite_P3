@@ -102,8 +102,7 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
             Validator.TryValidateObject(product, context, validationResults, true);
 
             var errors = validationResults
-                .SelectMany(result => result.MemberNames.Select(member => new { member, result.ErrorMessage }))
-                .ToDictionary(x => x.member, x => x.ErrorMessage);
+                .SelectMany(result => result.MemberNames.Select(member => new { member, result.ErrorMessage }));
 
                 return validationResults.Select(r => r.ErrorMessage).ToList();
         }
@@ -118,14 +117,10 @@ namespace P3AddNewFunctionalityDotNetCore.Models.Services
 
         private static Product MapToProductEntity(ProductViewModel product)
         {
-            if (!double.TryParse(product.Price, NumberStyles.Any, CultureInfo.InvariantCulture, out double parsedPrice))
-            {
-                throw new FormatException($"Invalid price format: '{product.Price}'");
-            }
             Product productEntity = new Product
             {
                 Name = product.Name,
-                Price = parsedPrice,
+                Price = double.Parse(product.Price, CultureInfo.InvariantCulture),
                 Quantity = Int32.Parse(product.Stock),
                 Description = product.Description,
                 Details = product.Details
