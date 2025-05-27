@@ -154,7 +154,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
                 Name = "Produit",
                 Description = "",
                 Details = "",
-                Price = "10",
+                Price = "10.25",
                 Stock = "abc"
             };
 
@@ -190,7 +190,7 @@ namespace P3AddNewFunctionalityDotNetCore.Tests
                 Name = "Produit",
                 Description = "",
                 Details = "",
-                Price = "10",
+                Price = "10.00",
                 Stock = "0"
             };
 
