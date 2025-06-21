@@ -11,6 +11,21 @@ SSMS : https://docs.microsoft.com/fr-fr/sql/ssms/download-sql-server-management-
 
 *Remarque : les versions antérieures de MSSQL Server devraient fonctionner sans problèmes, mais elles n’ont pas été testées.
 
+
+## Installation 
+1. Cloner le dépôt :  
+      - git clone https://github.com/BeastWolf691/Back-End.NET_Testez_implementation_nouvelle_fonctionnalite_P3.git  
+
+2. Ouvrez le projet dans Visual Studio 2022 et se positionner sur la branche :  
+      - git checkout Steven  
+
+3. Restaurer les dépendances :  
+      - dotnet restore  
+
+4. Lancer l'application :  
+      - dotnet run  
+
+
 *Dans le projet P3AddNewFunctionalityDotNetCore, ouvrez le fichier appsettings.json.*
 
 Vous avez la section ConnectionStrings qui définit les chaînes de connexion pour les 2 bases de données utilisées dans cette application.
